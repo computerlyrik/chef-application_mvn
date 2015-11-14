@@ -18,15 +18,17 @@
 #
 
 
-require 'chef/mixin/shell_out'
-include Chef::Mixin::ShellOut
+#require 'chef/mixin/shell_out'
+#include Chef::Mixin::ShellOut
 include Chef::DSL::IncludeRecipe
+#::Chef::Recipe.send(:include, Opscode::Maven::Default)
+#include_recipe "maven"
 
 action :before_compile do
+  include_recipe "maven"
 end
 
 action :before_deploy do
-  include_recipe "maven"
   call_maven("install")
 end
 
