@@ -23,3 +23,7 @@ default_action :create
 
 attribute :goals, :kind_of => [String], :default => []
 
+def initialize(*args)
+  super
+  @run_context.include_recipe "maven"
+end

@@ -18,11 +18,21 @@
 #
 
 
-#require 'chef/mixin/shell_out'
-#include Chef::Mixin::ShellOut
 include Chef::DSL::IncludeRecipe
-#::Chef::Recipe.send(:include, Opscode::Maven::Default)
-#include_recipe "maven"
+
+require 'mixlib/log'
+	
+class Log
+  extend Mixlib::Log
+  level="debug"
+end
+
+
+# Support whyrun
+def whyrun_supported?
+  true
+end
+
 
 action :before_compile do
   converge_by("Preparing System for #{new_resource.name}") do
@@ -34,6 +44,12 @@ action :before_deploy do
   converge_by("Starting Maven install prcess for #{new_resource.name}") do
     call_maven("install")
   end
+end
+
+action :before_migrate do
+end
+
+action :before_symlink do
 end
 
 action :before_restart do
@@ -51,8 +67,7 @@ end
 protected
 
 def call_maven(goals)
-  cmd = Mixlib::ShellOut.new("mvn", goals, :env => nil, :cwd => new_resource.path)
+  cmd = Mixlib::ShellOut.new("mvn", goals, :env => nil, :cwd => "#{new_resource.path}/current", :live_stream => Log.logger)
   cmd.run_command
-  cmd
 end
 
