@@ -24,7 +24,7 @@ require 'mixlib/log'
 	
 class Log
   extend Mixlib::Log
-  level="debug"
+  level=Logger::DEBUG
 end
 
 
@@ -67,7 +67,8 @@ end
 protected
 
 def call_maven(goals)
-  cmd = Mixlib::ShellOut.new("mvn", goals, :env => nil, :cwd => "#{new_resource.path}/current", :live_stream => Log.logger)
+  Log.level=:debug
+  cmd = Mixlib::ShellOut.new("mvn", goals, :env => nil, :cwd => "#{new_resource.path}/current", :live_stream => Log)
   cmd.run_command
 end
 
