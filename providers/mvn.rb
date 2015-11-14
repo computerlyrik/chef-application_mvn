@@ -25,25 +25,27 @@ include Chef::DSL::IncludeRecipe
 #include_recipe "maven"
 
 action :before_compile do
-  include_recipe "maven"
+  converge_by("Preparing System for #{new_resource.name}") do
+    include_recipe "maven"
+  end
 end
 
 action :before_deploy do
-  call_maven("install")
-end
-
-action :before_migrate do
-end
-
-action :before_symlink do
+  converge_by("Starting Maven install prcess for #{new_resource.name}") do
+    call_maven("install")
+  end
 end
 
 action :before_restart do
-  call_maven("clean")
+  converge_by("Cleaning up #{new_resource.name}") do
+    call_maven("clean")
+  end
 end
 
 action :after_restart do
-  call_maven("install")
+  converge_by("Starting Maven install prcess for #{new_resource.name}") do
+    call_maven("install")
+  end
 end
 
 protected

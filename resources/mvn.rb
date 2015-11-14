@@ -19,5 +19,7 @@
 
 include ApplicationCookbook::ResourceBase
 
+default_action :create
+
 attribute :goals, :kind_of => [String], :default => []
 
