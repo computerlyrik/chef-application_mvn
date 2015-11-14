@@ -41,15 +41,16 @@ action :before_compile do
 end
 
 action :before_deploy do
+end
+
+action :before_migrate do
   converge_by("Starting Maven install prcess for #{new_resource.name}") do
     call_maven("install")
   end
 end
 
-action :before_migrate do
-end
-
 action :before_symlink do
+
 end
 
 action :before_restart do
@@ -67,8 +68,8 @@ end
 protected
 
 def call_maven(goals)
-  Log.level=:debug
-  cmd = Mixlib::ShellOut.new("mvn", goals, :env => nil, :cwd => "#{new_resource.path}/current", :live_stream => Log)
+  Log.level=Logger::DEBUG
+  cmd = Mixlib::ShellOut.new("mvn", goals, :env => nil, :cwd => new_resource.release_path, :live_stream => Log)
   cmd.run_command
 end
 
