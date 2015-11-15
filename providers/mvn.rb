@@ -41,15 +41,9 @@ action :before_compile do
 end
 
 action :before_deploy do
-  converge_by("Cleaning up #{new_resource.name}") do
-    call_maven("clean")
-  end
 end
 
 action :before_migrate do
-  converge_by("Starting Maven install prcess for #{new_resource.name}") do
-    call_maven("install")
-  end
 end
 
 action :before_symlink do
